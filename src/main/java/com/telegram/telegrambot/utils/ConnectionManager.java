@@ -1,7 +1,5 @@
 package com.telegram.telegrambot.utils;
 
-import org.apache.logging.log4j.util.PropertiesUtil;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
