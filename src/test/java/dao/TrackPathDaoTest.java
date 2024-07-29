@@ -1,9 +1,9 @@
 package dao;
 
-import com.telegram.telegrambot.dao.implementations.TrackNameDAO;
-import com.telegram.telegrambot.dao.implementations.TrackPathDAO;
-import com.telegram.telegrambot.entities.TrackPath;
-import com.telegram.telegrambot.exception.DaoException;
+import com.layers.database.dao.implementations.TrackNameDAO;
+import com.layers.database.dao.implementations.TrackPathDAO;
+import com.layers.database.entities.TrackPath;
+import com.layers.exception.DaoException;
 import org.junit.jupiter.api.Test;
 
 public class TrackPathDaoTest {

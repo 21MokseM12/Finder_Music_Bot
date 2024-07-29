@@ -1,6 +1,6 @@
 package validators;
 
-import com.telegram.telegrambot.services.implementations.validators.LinkValidator;
+import com.layers.utils.validators.implementation.LinkValidator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

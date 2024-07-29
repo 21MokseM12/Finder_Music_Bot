@@ -1,9 +1,9 @@
 package database;
 
-import com.telegram.telegrambot.dao.implementations.TrackNameDAO;
-import com.telegram.telegrambot.dao.implementations.TrackPathDAO;
-import com.telegram.telegrambot.exception.TrackNotFoundException;
-import com.telegram.telegrambot.services.implementations.database.DataBase;
+import com.layers.database.dao.implementations.TrackNameDAO;
+import com.layers.database.dao.implementations.TrackPathDAO;
+import com.layers.exception.TrackNotFoundException;
+import com.layers.database.service.DataBase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
