@@ -32,8 +32,6 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     final private BotConfig config;
 
-    private boolean albumFlag = false;
-
     private boolean nameFlag = false;
 
     private final InlineKeyboardMarkup menu;
@@ -122,8 +120,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     sendMessage(chatID, MessageConstants.WELCOME_MESSAGE.toString(), menu);
                     break;
                 default:
-                    //Поиск трека по имени исполнителя и названию трека
-                    if (nameFlag && !albumFlag) {
+                    if (nameFlag) {
                         deleteMessage(chatID, messageID - 1);
                         try {
                             String trackName, artistName;
@@ -157,10 +154,6 @@ public class TelegramBot extends TelegramLongPollingBot {
                         } catch (TelegramApiException e) {
                             log.error(e.getMessage());
                         }
-                    }
-                    //Поиск альбома по имени исполнителя и названию альбома
-                    else if (!nameFlag && albumFlag) {
-
                     }
                     else sendMessage(chatID, MessageConstants.INVALID_QUERY_MESSAGE.toString());
                     break;
