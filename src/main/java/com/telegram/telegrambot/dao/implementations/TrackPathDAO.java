@@ -17,15 +17,6 @@ public class TrackPathDAO implements Dao<Long, TrackPath> {
 
     private final TrackNameDAO trackNameDao;
 
-    @Autowired
-    private TrackPathDAO(TrackNameDAO trackNameDao) {
-        this.trackNameDao = trackNameDao;
-    }
-
-    public TrackPathDAO() {
-        trackNameDao = new TrackNameDAO();
-    }
-
     private static final String FIND_BY_ID_SQL = """
         SELECT
             id,
@@ -55,6 +46,15 @@ public class TrackPathDAO implements Dao<Long, TrackPath> {
         track_id = ?
         WHERE id = ?
         """;
+
+    @Autowired
+    private TrackPathDAO(TrackNameDAO trackNameDao) {
+        this.trackNameDao = trackNameDao;
+    }
+
+    public TrackPathDAO() {
+        trackNameDao = new TrackNameDAO();
+    }
 
     @Override
     public Optional<TrackPath> findById(Long id) throws DaoException {
