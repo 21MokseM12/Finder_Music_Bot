@@ -31,4 +31,9 @@ public class TrackPathDaoTest {
     public void delete() throws DaoException {
         System.out.println(dao.delete(1L));
     }
+
+    @Test
+    public void findByTrackId() throws DaoException {
+        System.out.println(dao.findByTrackId(6L));
+    }
 }

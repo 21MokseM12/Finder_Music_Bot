@@ -47,6 +47,15 @@ public class TrackPathDAO implements Dao<Long, TrackPath> {
         WHERE id = ?
         """;
 
+    private static final String FIND_BY_TRACK_ID_SQL = """
+        SELECT
+            id,
+            path,
+            track_id
+        FROM track_path
+        WHERE track_id = ?
+        """;
+
     @Autowired
     private TrackPathDAO(TrackNameDAO trackNameDao) {
         this.trackNameDao = trackNameDao;
@@ -139,6 +148,28 @@ public class TrackPathDAO implements Dao<Long, TrackPath> {
             statement.setLong(3, entity.getId());
 
             return statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    public Optional<TrackPath> findByTrackId(Long id) throws DaoException {
+        try {
+            return findByTrackId(id, ConnectionManager.get());
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    public Optional<TrackPath> findByTrackId(Long id, Connection connection) throws DaoException {
+        try (PreparedStatement statement = connection.prepareStatement(FIND_BY_TRACK_ID_SQL)) {
+            statement.setLong(1, id);
+
+            TrackPath result = null;
+            ResultSet response = statement.executeQuery();
+            if (response.next()) result = buildTrackPath(response);
+
+            return Optional.ofNullable(result);
         } catch (SQLException e) {
             throw new DaoException(e);
         }
