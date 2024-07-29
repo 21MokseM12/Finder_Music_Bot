@@ -58,8 +58,15 @@ public class TrackPathDAO implements Dao<Long, TrackPath> {
 
     @Override
     public Optional<TrackPath> findById(Long id) throws DaoException {
-        try (Connection connection = ConnectionManager.get();
-             PreparedStatement statement = connection.prepareStatement(FIND_BY_ID_SQL)) {
+        try {
+            return findById(id, ConnectionManager.get());
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    public Optional<TrackPath> findById(Long id, Connection connection) throws DaoException {
+        try (PreparedStatement statement = connection.prepareStatement(FIND_BY_ID_SQL)) {
             statement.setLong(1, id);
 
             TrackPath result = null;
@@ -74,8 +81,15 @@ public class TrackPathDAO implements Dao<Long, TrackPath> {
 
     @Override
     public TrackPath save(TrackPath entity) throws DaoException {
-        try (Connection connection = ConnectionManager.get();
-            PreparedStatement statement = connection.prepareStatement(SAVE_SQL, Statement.RETURN_GENERATED_KEYS)) {
+        try {
+            return save(entity, ConnectionManager.get());
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    public TrackPath save(TrackPath entity, Connection connection) throws DaoException {
+        try (PreparedStatement statement = connection.prepareStatement(SAVE_SQL, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, entity.getPath());
             statement.setLong(2, entity.getTrackName().getId());
 
@@ -92,8 +106,15 @@ public class TrackPathDAO implements Dao<Long, TrackPath> {
 
     @Override
     public boolean delete(Long id) throws DaoException {
-        try (Connection connection = ConnectionManager.get();
-             PreparedStatement statement = connection.prepareStatement(DELETE_SQL)) {
+        try {
+            return delete(id, ConnectionManager.get());
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    public boolean delete(Long id, Connection connection) throws DaoException {
+        try (PreparedStatement statement = connection.prepareStatement(DELETE_SQL)) {
             statement.setLong(1, id);
 
             return statement.executeUpdate() > 0;
@@ -104,8 +125,15 @@ public class TrackPathDAO implements Dao<Long, TrackPath> {
 
     @Override
     public boolean update(TrackPath entity) throws DaoException {
-        try (Connection connection = ConnectionManager.get();
-             PreparedStatement statement = connection.prepareStatement(UPDATE_SQL)) {
+        try {
+            return update(entity, ConnectionManager.get());
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    public boolean update(TrackPath entity, Connection connection) throws DaoException {
+        try (PreparedStatement statement = connection.prepareStatement(UPDATE_SQL)) {
             statement.setString(1, entity.getPath());
             statement.setLong(2, entity.getTrackName().getId());
             statement.setLong(3, entity.getId());

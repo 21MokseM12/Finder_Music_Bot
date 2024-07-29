@@ -14,21 +14,17 @@ import java.net.URL;
 @Slf4j
 public class LinkHandler {
 
-    public InputFile returnFileByLink(String link, String directoryToStore, String fileName) {
+    public void downloadFileByLink(String link, String path) {
         try (BufferedInputStream inputStream = new BufferedInputStream(new URL(link).openStream());
-             FileOutputStream outputStream = new FileOutputStream(directoryToStore.concat("/").concat(fileName))){
+             FileOutputStream outputStream = new FileOutputStream(path)){
             byte[] data = new byte[4096];
             int count;
-
             while ((count = inputStream.read(data, 0,4096)) != -1) {
                 outputStream.write(data,0,count);
                 outputStream.flush();
             }
-
         } catch (IOException e) {
             log.error(e.getMessage());
         }
-
-        return new InputFile(new File(directoryToStore.concat("/").concat(fileName)));
     }
 }

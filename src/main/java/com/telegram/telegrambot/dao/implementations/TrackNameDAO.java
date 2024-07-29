@@ -51,8 +51,15 @@ public class TrackNameDAO implements Dao<Long, TrackName> {
 
     @Override
     public Optional<TrackName> findById(Long id) throws DaoException {
-        try (Connection connection = ConnectionManager.get();
-             PreparedStatement statement = connection.prepareStatement(FIND_BY_ID_SQL)) {
+        try {
+            return findById(id, ConnectionManager.get());
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    public Optional<TrackName> findById(Long id, Connection connection) throws DaoException {
+        try (PreparedStatement statement = connection.prepareStatement(FIND_BY_ID_SQL)) {
             statement.setLong(1, id);
 
             ResultSet response = statement.executeQuery();
@@ -68,8 +75,16 @@ public class TrackNameDAO implements Dao<Long, TrackName> {
 
     @Override
     public TrackName save(TrackName entity) throws DaoException {
-        try (Connection connection = ConnectionManager.get();
-            PreparedStatement statement = connection.prepareStatement(SAVE_SQL, Statement.RETURN_GENERATED_KEYS)) {
+        try {
+            return save(entity, ConnectionManager.get());
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+
+    }
+
+    public TrackName save(TrackName entity, Connection connection) throws DaoException {
+        try (PreparedStatement statement = connection.prepareStatement(SAVE_SQL, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, entity.getTrackTitle());
             statement.setString(2, entity.getArtistName());
 
@@ -87,8 +102,15 @@ public class TrackNameDAO implements Dao<Long, TrackName> {
 
     @Override
     public boolean delete(Long id) throws DaoException {
-        try (Connection connection = ConnectionManager.get();
-            PreparedStatement statement = connection.prepareStatement(DELETE_SQL)) {
+        try {
+            return delete(id, ConnectionManager.get());
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    public boolean delete(Long id, Connection connection) throws DaoException {
+        try (PreparedStatement statement = connection.prepareStatement(DELETE_SQL)) {
             statement.setLong(1, id);
 
             return statement.executeUpdate() > 0;
@@ -99,8 +121,15 @@ public class TrackNameDAO implements Dao<Long, TrackName> {
 
     @Override
     public boolean update(TrackName entity) throws DaoException {
-        try (Connection connection = ConnectionManager.get();
-            PreparedStatement statement = connection.prepareStatement(UPDATE_SQL)) {
+        try {
+            return update(entity, ConnectionManager.get());
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    public boolean update(TrackName entity, Connection connection) throws DaoException {
+        try (PreparedStatement statement = connection.prepareStatement(UPDATE_SQL)) {
             statement.setString(1, entity.getTrackTitle());
             statement.setString(2, entity.getArtistName());
             statement.setLong(3, entity.getId());
@@ -112,8 +141,15 @@ public class TrackNameDAO implements Dao<Long, TrackName> {
     }
 
     public boolean contains(TrackName trackName) throws DaoException {
-        try (Connection connection = ConnectionManager.get();
-            PreparedStatement statement = connection.prepareStatement(CONTAINS_SQL)) {
+        try {
+            return contains(trackName, ConnectionManager.get());
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    public boolean contains(TrackName trackName, Connection connection) throws DaoException {
+        try (PreparedStatement statement = connection.prepareStatement(CONTAINS_SQL)) {
             statement.setString(1, trackName.getTrackTitle());
             statement.setString(2, trackName.getArtistName());
 

@@ -13,6 +13,7 @@ public class TrackNameValidator implements Validator {
     public boolean isValid(String data) {
         List<String> trackDefinition = Arrays.stream(data.trim().split(" - ")).toList();
         trackDefinition = trackDefinition.stream().map(String::trim).toList();
+
         return trackDefinition.size() == 2;
     }
 }
