@@ -4,6 +4,7 @@ import com.telegram.telegrambot.config.BotConfig;
 import com.telegram.telegrambot.enums.Directories;
 import com.telegram.telegrambot.enums.MessageConstants;
 import com.telegram.telegrambot.exception.TrackNotFoundException;
+import com.telegram.telegrambot.services.implementations.database.DataBase;
 import com.telegram.telegrambot.services.implementations.listeners.HitmoListener;
 import com.telegram.telegrambot.services.implementations.handlers.LinkHandler;
 import com.telegram.telegrambot.services.implementations.validators.TrackNameValidator;
@@ -47,14 +48,17 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private final Parser parser;
 
+    private final DataBase dataBase;
+
     @Autowired
-    public TelegramBot(BotConfig config, HitmoListener hitmoListener, LinkHandler linkHandler, TrackNameValidator trackNameValidator, Parser parser) {
+    public TelegramBot(BotConfig config, HitmoListener hitmoListener, LinkHandler linkHandler, TrackNameValidator trackNameValidator, Parser parser, DataBase dataBase) {
         this.config = config;
         this.menu = new InlineKeyboardMarkup();
         this.hitmoListener = hitmoListener;
         this.linkHandler = linkHandler;
         this.trackNameValidator = trackNameValidator;
         this.parser = parser;
+        this.dataBase = dataBase;
         loadMenuButtons();
     }
 
@@ -127,16 +131,24 @@ public class TelegramBot extends TelegramLongPollingBot {
                             else {
                                 trackName = parser.parseTrackName(messageText);
                                 artistName = parser.parseArtistName(messageText);
+                                String path;
 
+                                if (dataBase.containsTrack(trackName, artistName)) path = dataBase.getTrackPath(trackName, artistName);
+                                else {
+                                    path = Directories.MUSIC_FILE_DIRECTORY_NAME.toString()
+                                            .concat("/")
+                                            .concat(artistName)
+                                            .concat("-")
+                                            .concat(trackName)
+                                            .concat(".mp3");
 
+                                    String link = hitmoListener.requestToHitmo(messageText);
+                                    linkHandler.downloadFileByLink(link, path);
 
-                                String link = hitmoListener.requestToHitmo(messageText);
+                                    dataBase.saveTrack(trackName, artistName, path);
+                                }
 
-                                this.execute(new SendAudio(String.valueOf(chatID),linkHandler.downloadFileByLink(link,
-                                        Directories.MUSIC_FILE_DIRECTORY_NAME.toString(),
-                                        trackName.concat("-").concat(artistName))));
-
-
+                                this.execute(new SendAudio(String.valueOf(chatID), new InputFile(new File(path))));
 
                                 sendMessage(chatID, MessageConstants.AFTER_REQUEST_MESSAGE.toString(), backToMenu);
                             }
