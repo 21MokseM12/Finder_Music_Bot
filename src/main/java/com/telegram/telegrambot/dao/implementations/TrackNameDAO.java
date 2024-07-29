@@ -42,6 +42,13 @@ public class TrackNameDAO implements Dao<Long, TrackName> {
             WHERE id = ?
             """;
 
+    private static final String CONTAINS_SQL = """
+            SELECT COUNT (track_title)
+            FROM track_name
+            WHERE
+            (track_title = ? AND artist_name = ?)
+            """;
+
     @Override
     public Optional<TrackName> findById(Long id) throws DaoException {
         try (Connection connection = ConnectionManager.get();
@@ -99,6 +106,21 @@ public class TrackNameDAO implements Dao<Long, TrackName> {
             statement.setLong(3, entity.getId());
 
             return statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    public boolean contains(TrackName trackName) throws DaoException {
+        try (Connection connection = ConnectionManager.get();
+            PreparedStatement statement = connection.prepareStatement(CONTAINS_SQL)) {
+            statement.setString(1, trackName.getTrackTitle());
+            statement.setString(2, trackName.getArtistName());
+
+            ResultSet response = statement.executeQuery();
+            int result = 0;
+            if (response.next()) result = response.getInt("count");
+            return result > 0;
         } catch (SQLException e) {
             throw new DaoException(e);
         }

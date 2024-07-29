@@ -28,4 +28,9 @@ public class TrackNameDaoTest {
     public void update() throws DaoException {
         System.out.println(dao.update(new TrackName(3L, "Dima", "Egorov")));
     }
+
+    @Test
+    public void contains() throws DaoException {
+        System.out.println(dao.contains(new TrackName("Dim", "Egorov")));
+    }
 }
