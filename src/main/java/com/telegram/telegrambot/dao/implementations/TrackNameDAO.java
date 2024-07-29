@@ -4,13 +4,15 @@ import com.telegram.telegrambot.dao.interfaces.Dao;
 import com.telegram.telegrambot.entities.TrackName;
 import com.telegram.telegrambot.exception.DaoException;
 import com.telegram.telegrambot.utils.ConnectionManager;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.sql.*;
 import java.util.Optional;
 
+@Component
+@Scope("singleton")
 public class TrackNameDAO implements Dao<Long, TrackName> {
-
-    private static final TrackNameDAO INSTANCE = new TrackNameDAO();
 
     private static final String FIND_BY_ID_SQL = """
             SELECT id,
@@ -39,10 +41,6 @@ public class TrackNameDAO implements Dao<Long, TrackName> {
                 artist_name = ?
             WHERE id = ?
             """;
-
-    private TrackNameDAO() {}
-
-    public static TrackNameDAO getInstance() {return INSTANCE;}
 
     @Override
     public Optional<TrackName> findById(Long id) throws DaoException {

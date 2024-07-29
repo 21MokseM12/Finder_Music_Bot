@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 public class TrackNameDaoTest {
 
-    private final TrackNameDAO dao = TrackNameDAO.getInstance();
+    private final TrackNameDAO dao = new TrackNameDAO();
 
     @Test
     public void find() throws DaoException {
