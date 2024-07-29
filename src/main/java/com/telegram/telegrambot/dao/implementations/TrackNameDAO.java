@@ -49,6 +49,13 @@ public class TrackNameDAO implements Dao<Long, TrackName> {
             (track_title = ? AND artist_name = ?)
             """;
 
+    private static final String GET_ID_SQL = """
+            SELECT id
+            FROM track_name
+            WHERE
+            (track_title = ? AND artist_name = ?)
+            """;
+
     @Override
     public Optional<TrackName> findById(Long id) throws DaoException {
         try {
@@ -157,6 +164,29 @@ public class TrackNameDAO implements Dao<Long, TrackName> {
             int result = 0;
             if (response.next()) result = response.getInt("count");
             return result > 0;
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    public Optional<Long> getId(TrackName trackName) throws DaoException {
+        try {
+            return getId(trackName, ConnectionManager.get());
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    public Optional<Long> getId(TrackName trackName, Connection connection) throws DaoException {
+        try (PreparedStatement statement = connection.prepareStatement(GET_ID_SQL)) {
+            statement.setString(1, trackName.getTrackTitle());
+            statement.setString(2, trackName.getArtistName());
+
+            Long id = null;
+            ResultSet response = statement.executeQuery();
+            if (response.next()) id = response.getLong("id");
+
+            return Optional.ofNullable(id);
         } catch (SQLException e) {
             throw new DaoException(e);
         }

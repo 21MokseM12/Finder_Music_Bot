@@ -33,4 +33,9 @@ public class TrackNameDaoTest {
     public void contains() throws DaoException {
         System.out.println(dao.contains(new TrackName("Dim", "Egorov")));
     }
+
+    @Test
+    public void getId() throws DaoException {
+        System.out.println(dao.getId(new TrackName("Dim", "Egorov")));
+    }
 }
