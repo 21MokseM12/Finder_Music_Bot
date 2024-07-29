@@ -14,7 +14,7 @@ import java.net.URL;
 @Slf4j
 public class LinkHandler {
 
-    public InputFile downloadFileByLink(String link, String directoryToStore, String fileName) {
+    public InputFile returnFileByLink(String link, String directoryToStore, String fileName) {
         try (BufferedInputStream inputStream = new BufferedInputStream(new URL(link).openStream());
              FileOutputStream outputStream = new FileOutputStream(directoryToStore.concat("/").concat(fileName))){
             byte[] data = new byte[4096];
