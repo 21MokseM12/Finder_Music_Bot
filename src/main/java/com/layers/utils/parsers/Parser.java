@@ -12,6 +12,8 @@ public class Parser {
 
     private final LinkValidator linkValidator;
 
+
+
     @Autowired
     public Parser(LinkValidator validator) {this.linkValidator = validator;}
 
